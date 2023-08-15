@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Dad Jokes Generator</title>
+</head>
+<style>
+    
+* {
+    margin: 0;
+    box-sizing: 0;
+    overflow: hidden;
+}
+:root {
+    --font-size: 20px;
+    --margin-top: 10px;
+}
+
+@media screen and (max-width: 1920px) {
+    :root {
+        --font-size: 48px;
+        --margin-top: 30px;
+    }
+}
+
+@media screen and (max-width: 2560px) {
+    :root {
+        --font-size: 69px;
+        --margin-top: 69px;
+    }
+}
+
+.djConteiner {
+    background: black;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-width: 450px;
+}
+.introText {
+    font-size: 3rem;
+    color: white;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    padding-top: 10px;
+    text-decoration: underline;
+}
+.jokeSetup {
+    font-size: var(--font-size);
+    margin-top: var(--margin-top);
+    height: auto;
+    width: 80%;
+    padding-top: var(--margin-top);
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    left: 50%;
+    text-align: center;
+    transform: translateX(-50%);
+    position: relative;
+}
+.generator {
+    width: 200px;
+    height: 50px;
+    font-size: 22px;
+    left: 50%;
+    font-weight: 600;
+    font-family: 'Courier New', Courier, monospace;
+    transform: translateX(-50%);
+    position: absolute;
+    bottom: 10%;
+    box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.678);
+}
+@media screen {
+    
+}
+</style>
+<body>
+    <div class="djConteiner">
+        <div class="introText">Dad Jokes Generator</div>
+        <div class="jokeSetup" ></div>
+        <button class="generator" id="btn">Generate joke</button>
+    </div>
+</body>
+<script >
+    const generator = document.getElementById('btn');
+const jokeSetup = document.querySelector('.jokeSetup');
+
+window.addEventListener('load', () => {
+    generator.addEventListener('click', async () => {
+        const url = 'https://api.api-ninjas.com/v1/dadjokes';
+        const apiKey = 'YSLihxLwQmwUAMlt9qH9zQ==MWs0pls35sTJLphg';
+
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-Api-Key': apiKey
+            }
+        };
+
+        try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            console.log(result);
+            jokeSetup.textContent = result[0].joke;
+        } catch (error) {
+            console.error('Error: ', error);
+        }
+    });
+});
+
+function setFontSizeAndPosition(selector, fontSize, marginTop) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(element => {
+        element.style.fontSize = fontSize;
+        element.style.marginTop = marginTop;
+        element.style.setProperty('font-size', fontSize, 'important'); 
+        element.style.setProperty('margin-top', marginTop, 'important')
+    });
+}
+
+
+function adjustFontSizesAndPositions() {
+    console.log('adjustFontSizesAndPositions called');
+    
+    const screenWidth = window.innerWidth;
+    console.log('Screen Width:', screenWidth);
+
+    let fontSize, marginTop;
+
+    if (screenWidth > 1920) {
+        console.log('Screen width > 1920');
+        fontSize = '102px';
+        marginTop = '69px';
+    } else if (screenWidth <= 1920 && screenWidth >1600) {
+        console.log('Screen width <= 1920');
+        fontSize = '91px';
+        marginTop = '30px';
+    } else if (screenWidth >= 1024 && screenWidth == 1600) {
+        console.log('Screen width <= 1920');
+        fontSize = '84px';
+        marginTop = '30px';
+    } else if (screenWidth >= 768 && screenWidth < 1024) {
+        console.log('Screen width >= 768');
+        fontSize = '62px';
+        marginTop = '10px';
+    } else {
+        console.log('Screen width < 768');
+        fontSize = '52px';
+        marginTop = '0';
+    }
+
+    console.log('Font Size:', fontSize);
+    console.log('Margin Top:', marginTop);
+
+    setFontSizeAndPosition('.jokeSetup', fontSize, marginTop);
+}
+
+window.addEventListener('load', adjustFontSizesAndPositions);
+window.addEventListener('resize', adjustFontSizesAndPositions);
+
+</script>
+
+</html>
